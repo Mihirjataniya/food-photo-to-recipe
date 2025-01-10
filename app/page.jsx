@@ -7,13 +7,13 @@ export default function Home() {
   const [imageUrl, setImageUrl] = useState("");
 
   const fetchLabels = async (event) => {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault(); 
     try {
-      const response = await axios.post('/api/v1/identify-dish', {
+      const response = await axios.post('/api/identify-dish', {
         imageUrl: imageUrl
       });
       console.log(response.data);
-      setData(response.data.labels); // Assuming labels is an array of objects
+      setData(response.data.labels); 
     } catch (error) {
       console.error("Error fetching labels:", error);
     }
