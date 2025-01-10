@@ -1,11 +1,15 @@
 'use client';
+import { useEdgeStore } from '@/lib/edgestore';
+import axios from 'axios';
 import { Camera, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 
 const App = () => {
+  const [loading, setLoading] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
+  const { edgestore } = useEdgeStore();
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -32,11 +36,26 @@ const App = () => {
     }
   };
 
-  const handleFile = (file) => {
+  const animateLoading = (targetValue) => {
+    const increment = targetValue > loading ? 1 : -1; 
+    const interval = setInterval(() => {
+      setLoading((prev) => {
+        if ((increment > 0 && prev >= targetValue) || (increment < 0 && prev <= targetValue)) {
+          clearInterval(interval); 
+          return targetValue;
+        }
+        return prev + increment;
+      });
+    }, 10); 
+  };
+
+  const handleFile = async (file) => {
     if (!file.type.startsWith('image/')) {
       alert('Please upload an image file');
       return;
     }
+
+    animateLoading(25); 
 
     setFile(file);
     const reader = new FileReader();
@@ -44,12 +63,28 @@ const App = () => {
       setPreview(reader.result);
     };
     reader.readAsDataURL(file);
+
+    try {
+      const res = await edgestore.publicFiles.upload({
+        file,
+      });
+      animateLoading(50); 
+      const response = await axios.post('/api/identify-dish', {
+        imageUrl: res.url
+      });
+      const labels = response.data.labels
+      const descriptions = labels.map((label) => label.description);
+      console.log(descriptions);
+      setLoading(75)
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <div className="bg-black min-h-screen h-full flex flex-col items-center justify-center w-full">
       <div
-        className={`h-96 w-80 md:w-96 border-2 rounded-2xl flex flex-col gap-3 items-center justify-center border-[#FFD700] bg-gradient-to-br from-[#FFD700]/30 to-[#EAB308]/10 backdrop-blur-md shadow-lg hover:shadow-xl transition-all my-20 px-5 relative ${
+        className={`h-96 w-80 md:w-96 border-2 rounded-2xl flex flex-col gap-3 items-center justify-center border-[#FFD700] bg-gradient-to-br from-[#FFD700]/30 to-[#EAB308]/10 backdrop-blur-md shadow-lg hover:shadow-xl transition-all my-8  px-5 relative ${
           isDragging ? 'border-white border-dashed' : ''
         }`}
         onDragOver={handleDragOver}
@@ -90,8 +125,18 @@ const App = () => {
             </label>
           </>
         )}
+        {loading > 0 && (
+          <div className="absolute bottom-4 w-64 bg-black/20 h-3 rounded-full overflow-hidden backdrop-blur-sm">
+            <div
+              className="h-full bg-gradient-to-r from-[#FFD700] to-yellow-500 transition-all duration-300 ease-out rounded-full"
+              style={{ width: `${loading}%` }}
+            >
+              <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+            </div>
+          </div>
+        )}
       </div>
-      <p className="text-transparent text-3xl md:text-5xl bg-clip-text bg-gradient-to-r from-gray-300 via-white to-gray-300 font-extrabold drop-shadow-[0_0_10px_rgba(255,255,255,0.6)] text-center my-6 animate-shimmer">
+      <p className="text-transparent text-3xl md:text-5xl bg-clip-text bg-gradient-to-r from-gray-300 via-white to-gray-300 font-extrabold drop-shadow-[0_0_10px_rgba(255,255,255,0.6)] text-center my-6 animate-shimmer ">
         Ready to Cook? Upload Your Dish!
       </p>
     </div>
