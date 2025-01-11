@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server";
+import model from "@/lib/model";
 
-
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY)
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export async function POST(req) {
     try {

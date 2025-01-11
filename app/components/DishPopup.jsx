@@ -1,6 +1,6 @@
 import { X } from 'lucide-react';
 import React from 'react'
-
+import Link from 'next/link';
 const DishPopup = ({data,closePopUP}) => {
   const buttonColors = [
     { border: '#0ff', text: '#0ff' },      
@@ -30,8 +30,9 @@ const DishPopup = ({data,closePopUP}) => {
 
           <div className="grid md:grid-cols-2 gap-4">
             {data.map((item, index) => (
-              <button
+              <Link
                 key={item}
+                href={`/recipe/${item.replace(/ /g, "_")}`}
                 className="group relative py-4 px-6 rounded-lg border-2 bg-black transition-all duration-300 hover:scale-[1.05] overflow-hidden"
                 style={{
                   borderColor: buttonColors[index].border,
@@ -42,7 +43,7 @@ const DishPopup = ({data,closePopUP}) => {
                 <div 
                   className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300"
                   style={{ backgroundColor: buttonColors[index].border }}
-                />
+                />  
                 <span 
                   className="relative font-medium text-lg"
                   style={{ 
@@ -52,7 +53,7 @@ const DishPopup = ({data,closePopUP}) => {
                 >
                   {item}
                 </span>
-              </button>
+              </Link>
             ))}
           </div>
         </div>

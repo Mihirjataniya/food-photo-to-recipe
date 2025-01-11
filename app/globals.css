@@ -3,3 +3,23 @@
 @tailwind utilities;
 
 
+@keyframes pulse {
+    0% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 0.8;
+    }
+    75% {
+      opacity: 1;
+    }
+    100% {
+        opacity: 0.6;
+    }
+  }
+  
+  .animate-pulse {
+    animation: pulse 3s ease-in-out infinite;
+  }
+  
+  
