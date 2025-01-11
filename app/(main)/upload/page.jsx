@@ -1,4 +1,5 @@
 'use client';
+import DishPopup from '@/app/components/DishPopup';
 import { useEdgeStore } from '@/lib/edgestore';
 import axios from 'axios';
 import { Camera, Upload } from 'lucide-react';
@@ -10,7 +11,7 @@ const App = () => {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const { edgestore } = useEdgeStore();
-
+  const [data, setData] = useState([])
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragging(true);
@@ -37,16 +38,16 @@ const App = () => {
   };
 
   const animateLoading = (targetValue) => {
-    const increment = targetValue > loading ? 1 : -1; 
+    const increment = targetValue > loading ? 1 : -1;
     const interval = setInterval(() => {
       setLoading((prev) => {
         if ((increment > 0 && prev >= targetValue) || (increment < 0 && prev <= targetValue)) {
-          clearInterval(interval); 
+          clearInterval(interval);
           return targetValue;
         }
         return prev + increment;
       });
-    }, 10); 
+    }, 10);
   };
 
   const handleFile = async (file) => {
@@ -55,7 +56,7 @@ const App = () => {
       return;
     }
 
-    animateLoading(25); 
+    animateLoading(25);
 
     setFile(file);
     const reader = new FileReader();
@@ -68,7 +69,7 @@ const App = () => {
       const res = await edgestore.publicFiles.upload({
         file,
       });
-      animateLoading(50); 
+      animateLoading(50);
       const response = await axios.post('/api/identify-dish-labels', {
         imageUrl: res.url
       });
@@ -76,22 +77,26 @@ const App = () => {
       const descriptions = labels.map((label) => label.description);
       console.log(descriptions);
       setLoading(75)
-      const response2 = await axios.post('/api/generate-recipe-names',{
-        labels : descriptions
+      const response2 = await axios.post('/api/generate-recipe-names', {
+        labels: descriptions
       })
-      console.log(response2.data.recipeNames)
+      console.log(response2.data.recipeNames);
+      
+      setData(response2.data.recipeNames)
       setLoading(100)
     } catch (error) {
       console.error(error);
     }
   };
-
+  const closePopUp = () => {
+    setData([])
+  }
   return (
     <div className="bg-black min-h-screen h-full flex flex-col items-center justify-center w-full">
+      {data.length>0 && <DishPopup data={data} closePopUP={closePopUp} />}
       <div
-        className={`h-96 w-80 md:w-96 border-2 rounded-2xl flex flex-col gap-3 items-center justify-center border-[#FFD700] bg-gradient-to-br from-[#FFD700]/30 to-[#EAB308]/10 backdrop-blur-md shadow-lg hover:shadow-xl transition-all my-8  px-5 relative ${
-          isDragging ? 'border-white border-dashed' : ''
-        }`}
+        className={`h-96 w-80 md:w-96 border-2 rounded-2xl flex flex-col gap-3 items-center justify-center border-[#ff0] bg-gradient-to-br from-[#FFD700]/30 to-[#EAB308]/10 backdrop-blur-md shadow-lg hover:shadow-xl transition-all my-8  px-5 relative ${isDragging ? 'border-white border-dashed' : ''
+          }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -114,7 +119,7 @@ const App = () => {
               <div className="border border-[#f5e8a3] w-12"></div>
             </div>
             <label htmlFor="file-upload" className="cursor-pointer">
-              <div className="bg-[#FFD700] w-36 py-2 my-4 rounded-full font-bold shadow-md hover:shadow-lg hover:bg-yellow-400 hover:scale-105 transition-all flex items-center justify-center gap-2">
+              <div className="bg-[#FF0] w-36 py-2 my-4 rounded-full font-bold shadow-md hover:shadow-lg hover:bg-yellow-400 hover:scale-105 transition-all flex items-center justify-center gap-2">
                 <span>
                   <Upload size={18} />
                 </span>{' '}
