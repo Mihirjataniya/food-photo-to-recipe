@@ -69,13 +69,18 @@ const App = () => {
         file,
       });
       animateLoading(50); 
-      const response = await axios.post('/api/identify-dish', {
+      const response = await axios.post('/api/identify-dish-labels', {
         imageUrl: res.url
       });
       const labels = response.data.labels
       const descriptions = labels.map((label) => label.description);
       console.log(descriptions);
       setLoading(75)
+      const response2 = await axios.post('/api/generate-recipe-names',{
+        labels : descriptions
+      })
+      console.log(response2.data.recipeNames)
+      setLoading(100)
     } catch (error) {
       console.error(error);
     }
