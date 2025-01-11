@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Camera, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 
-const App = () => {
+const page = () => {
   const [loading, setLoading] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState(null);
@@ -91,6 +91,7 @@ const App = () => {
   const closePopUp = () => {
     setData([])
   }
+  
   return (
     <div className="bg-black min-h-screen h-full flex flex-col items-center justify-center w-full">
       {data.length>0 && <DishPopup data={data} closePopUP={closePopUp} />}
@@ -153,4 +154,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default page;
