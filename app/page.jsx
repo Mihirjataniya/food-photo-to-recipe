@@ -63,7 +63,7 @@ function App() {
             <FeatureCard
               icon={<Camera className="w-12 h-12 text-blue-400" />}
               title="Photo Recognition"
-              description="Google Vision identifies labels realted to dishes from your photos."
+              description="Google Vision recognizes labels associated with dishes in your photos."
             />
             <FeatureCard
               icon={<Sparkles className="w-12 h-12 text-yellow-400" />}
@@ -116,7 +116,7 @@ function App() {
           </div>
 
           {/* Copyright Section */}
-          <div className="text-sm text-zinc-400 mt-4 md:mt-0">
+          <div className="text-sm text-zinc-400 mt-4 md:mt-0 text-center">
             Copyright &copy; {new Date().getFullYear()} <a className='text-purple-500' target='_blank' href="https://www.linkedin.com/in/mihir-jataniya/">Mihir Jataniya.</a> All rights reserved.
           </div>
         </div>
