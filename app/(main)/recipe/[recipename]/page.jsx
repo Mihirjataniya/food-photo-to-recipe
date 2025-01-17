@@ -4,6 +4,7 @@ import axios from 'axios'
 import { ChevronRight, Clock, Dot, Group, Star, Users, Utensils } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 const page = () => {
     const [data, setData] = useState()
@@ -13,12 +14,15 @@ const page = () => {
 
     useEffect(() => {
         const fetchRecipe = async () => {
-            const response = await axios.post('/api/generate-recipe', {
-                recipeName: recipename,
-                servings: servings
-            })
-            console.log(response.data.recipe)
-            setData(response.data.recipe)
+            try {
+                const response = await axios.post('/api/generate-recipe', {
+                    recipeName: recipename,
+                    servings: servings
+                })
+                setData(response.data.recipe)
+            } catch (error) {
+                toast.error('Something went wrong')
+            }
         }
         fetchRecipe()
     }, [])

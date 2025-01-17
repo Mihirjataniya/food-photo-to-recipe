@@ -13,8 +13,7 @@ export async function POST(req) {
   try {
     const body = await req.json()
     const { imageUrl } = body
-    console.log(imageUrl);
-    console.log(client)
+    
     const [result] = await client.labelDetection({
       image: {
         source: { imageUri: imageUrl },

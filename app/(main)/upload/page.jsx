@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Camera, Upload } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useSession } from "next-auth/react";
+import toast from 'react-hot-toast';
 
 const page = () => {
   const { data: session, status } = useSession();
@@ -15,9 +16,7 @@ const page = () => {
   const { edgestore } = useEdgeStore();
   const [data, setData] = useState([])
 
-  useEffect(()=>{
-    
-  },[])
+ 
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -82,17 +81,15 @@ const page = () => {
       });
       const labels = response.data.labels
       const descriptions = labels.map((label) => label.description);
-      console.log(descriptions);
+      
       setLoading(75)
       const response2 = await axios.post('/api/generate-recipe-names', {
         labels: descriptions
-      })
-      console.log(response2.data.recipeNames);
-      
+      })  
       setData(response2.data.recipeNames)
       setLoading(100)
     } catch (error) {
-      console.error(error);
+      toast.error("Something went wrong")
     }
   };
   const closePopUp = () => {
