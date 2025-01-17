@@ -14,7 +14,7 @@ export async function POST(req) {
     const body = await req.json()
     const { imageUrl } = body
     console.log(imageUrl);
-
+    console.log(client)
     const [result] = await client.labelDetection({
       image: {
         source: { imageUri: imageUrl },
@@ -28,7 +28,6 @@ export async function POST(req) {
       { status: 200 })
   } catch (error) {
     console.log(error);
-
     return NextResponse.json({
       message: "Something went wrong",
       error
