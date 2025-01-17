@@ -27,9 +27,9 @@ function App() {
             <ChefHat className="w-8 h-8 text-[#ff0]" />
             <span className="text-xl font-bold text-white">RecipeAI</span>
           </div>
-          <button className="bg-[#ff0] text-black font-semibold px-6 py-2 rounded-full hover:bg-[#cc0] transition-colors">
-            Get Started
-          </button>
+          <Link href={'/signin'} className="bg-[#ff0] text-black font-semibold px-6 py-2 rounded-full hover:bg-[#cc0] transition-colors w-36 text-center">
+            Sign In
+          </Link>
         </nav>
 
         <div className="flex flex-col lg:flex-row items-center gap-12">
@@ -56,7 +56,8 @@ function App() {
 
       {/* Features Section */}
       <section id="features" className="bg-zinc-900 py-20">
-        <div className="container mx-auto px-6 md:px-20">
+        <div className="container mx-auto px-6
+         md:px-20">
           <h2 className="text-3xl font-bold mb-12 text-center text-white">Features</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <FeatureCard

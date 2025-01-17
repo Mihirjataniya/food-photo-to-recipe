@@ -3,15 +3,22 @@ import DishPopup from '@/app/components/DishPopup';
 import { useEdgeStore } from '@/lib/edgestore';
 import axios from 'axios';
 import { Camera, Upload } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSession } from "next-auth/react";
 
 const page = () => {
+  const { data: session, status } = useSession();
   const [loading, setLoading] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const { edgestore } = useEdgeStore();
   const [data, setData] = useState([])
+
+  useEffect(()=>{
+    
+  },[])
+
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragging(true);

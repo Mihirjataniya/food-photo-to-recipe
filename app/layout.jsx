@@ -1,6 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { EdgeStoreProvider } from "@/lib/edgestore";
+import { SessionProvider } from 'next-auth/react';
+import { Providers } from "./Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,9 +25,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
       >
-        <EdgeStoreProvider>
+        <Providers>
           {children}
-        </EdgeStoreProvider>
+        </Providers>
       </body>
     </html>
   );
